@@ -43,6 +43,7 @@ function itemsToSubmissions(items) {
             if (subid === "77162c58-eb72-4e2c-9dcb-38842dc26051"){
                 obs = obs.concat(_.cloneDeep(obs[0]));
                 obs[0].obtype = 'incident';
+                obs[0].latlng = [obs[0].latlng[0] - 0.0004, obs[0].latlng[1] - 0.0004];
             }
             return {
                 subid: subid,

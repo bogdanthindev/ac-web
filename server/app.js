@@ -7,7 +7,9 @@
 // Set default node environment to development
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
-require('newrelic');
+if (process.env.NODE_ENV !== 'development') {
+    require('newrelic');
+}
 var express = require('express');
 var config = require('./config/environment');
 // Setup server
@@ -21,7 +23,7 @@ var logger = require('./logger.js');
 
 // Start server
 server.listen(config.port, config.ip, function () {
-  logger.log('debug','Express server listening on %d, in %s mode', config.port, app.get('env'));
+    logger.log('debug', 'Express server listening on %d, in %s mode', config.port, app.get('env'));
 });
 
 
