@@ -8,8 +8,8 @@ angular.module('avalancheCanadaApp')
                 templateUrl: 'app/avalanchecanada/main/map.html',
                 controller: 'MapCtrl',
                 resolve: {
-                  obs: function (acObservation) {
-                    return acObservation.byPeriod('7:days');
+                  obs: function (acSubmission) {
+                    return acSubmission.byPeriod('7:days');
                   }
                 }
             })

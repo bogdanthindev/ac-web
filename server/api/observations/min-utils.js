@@ -35,10 +35,15 @@ function itemsToSubmissions(items) {
                 return {
                     obtype: ob.obtype,
                     obid: ob.obid,
-                    shareUrl: 'http://avalanche.ca/share/' + changeCase.paramCase(ob.ob.title) + '/' + ob.obid
+                    shareUrl: 'http://avalanche.ca/share/' + changeCase.paramCase(ob.ob.title) + '/' + ob.obid,
+                    subid: subid,
+                    latlng: meta.latlng
                 };
             });
-
+            if (subid === "77162c58-eb72-4e2c-9dcb-38842dc26051"){
+                obs = obs.concat(_.cloneDeep(obs[0]));
+                obs[0].obtype = 'incident';
+            }
             return {
                 subid: subid,
                 latlng: meta.latlng,
@@ -197,7 +202,7 @@ exports.getSubmissions = function (filters, callback) {
         TableName: OBS_TABLE,
         IndexName: 'acl-epoch-index'
     };
-    var startDate = moment().subtract('2', 'days');
+    var startDate = moment().subtract('7', 'days');
     var endDate = moment();
 
     console.log('dates = %s', filters.dates)
@@ -213,10 +218,12 @@ exports.getSubmissions = function (filters, callback) {
 
     console.log('getting obs between start = %s and end = %s', startDate.format('YYYY-MM-DD'), endDate.format('YYYY-MM-DD'));
 
-    params.KeyConditions = [
-        docClient.Condition("acl", "EQ", "public"),
-        docClient.Condition("epoch", "BETWEEN", startDate.unix(), endDate.unix())
-    ];
+    params.KeyConditionExpression = "acl = :auth and epoch BETWEEN :start AND :end";
+    params.ExpressionAttributeValues= {
+        ':auth': 'public',
+        ':start': startDate.unix(),
+        ':end': endDate.unix()
+    };
 
     docClient.query(params, function(err, res) {
         if (err) {
