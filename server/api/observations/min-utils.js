@@ -40,7 +40,7 @@ function itemsToSubmissions(items) {
                     latlng: meta.latlng
                 };
             });
-            if (subid === "77162c58-eb72-4e2c-9dcb-38842dc26051"){
+            if (subid === "ab2f77a8-98bf-4906-bb30-726d4764e517"){
                 obs = obs.concat(_.cloneDeep(obs[0]));
                 obs[0].obtype = 'incident';
                 obs[0].latlng = [obs[0].latlng[0] - 0.0004, obs[0].latlng[1] - 0.0004];
@@ -178,9 +178,9 @@ exports.saveSubmission = function (user, form, callback) {
         var valid = validateItem(item);
 
         if(valid){
-            docClient.putItem({
+            docClient.put({
                 TableName: OBS_TABLE,
-                Item: item,
+                Item: item
             }, function (err, data) {
                 if (err) {
                     logger.log('info', JSON.stringify(err));
